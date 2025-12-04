@@ -12,16 +12,16 @@ var _shape_generator: ShapePatternGenerator = ShapePatternGenerator.new()
 var _letter_generator: LetterPatternGenerator = LetterPatternGenerator.new()
 
 func start_game() -> void:
-	is_running = true
-	AppLogger.info("Game started")
+    is_running = true
+    AppLogger.info("Game started")
 
 func pause_game() -> void:
-	is_running = false
-	AppLogger.info("Game paused")
+    is_running = false
+    AppLogger.info("Game paused")
 
 func reset() -> void:
-	is_running = false
-	AppLogger.info("Game reset")
+    is_running = false
+    AppLogger.info("Game reset")
 
 func generate_number_puzzle(difficulty: String) -> Dictionary:
     return _number_generator.generate_puzzle(difficulty)
