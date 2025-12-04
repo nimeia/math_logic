@@ -1,5 +1,4 @@
 extends Node
-class_name Logger
 
 enum LogLevel { DEBUG, INFO, WARNING, ERROR }
 var _level: LogLevel = LogLevel.DEBUG
