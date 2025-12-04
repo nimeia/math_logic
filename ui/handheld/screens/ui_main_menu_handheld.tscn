@@ -1,0 +1,232 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/handheld/screens/ui_main_menu_handheld.gd" id="1"]
+
+[node name="MainMenuHandheld" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+separation = 12
+
+[node name="Top" type="VBoxContainer" parent="Margin/VBox"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="TitleRow" type="HBoxContainer" parent="Margin/VBox/Top"]
+size_flags_horizontal = 3
+
+[node name="TitleBlock" type="VBoxContainer" parent="Margin/VBox/Top/TitleRow"]
+size_flags_horizontal = 3
+separation = 4
+
+[node name="AppTitle" type="Label" parent="Margin/VBox/Top/TitleRow/TitleBlock"]
+text = "数字规律小博士"
+
+[node name="AppSubtitle" type="Label" parent="Margin/VBox/Top/TitleRow/TitleBlock"]
+text = "练数字 · 玩图形 · 玩转字母规律"
+theme_override_font_sizes/font_size = 14
+
+[node name="SettingsButton" type="Button" parent="Margin/VBox/Top/TitleRow"]
+text = "⚙"
+size_flags_horizontal = 1
+
+[node name="UserInfo" type="HBoxContainer" parent="Margin/VBox/Top"]
+size_flags_horizontal = 3
+separation = 8
+
+[node name="Avatar" type="ColorRect" parent="Margin/VBox/Top/UserInfo"]
+custom_minimum_size = Vector2(48, 48)
+color = Color(0.65098, 0.815686, 1, 1)
+
+[node name="UserVBox" type="VBoxContainer" parent="Margin/VBox/Top/UserInfo"]
+size_flags_horizontal = 3
+separation = 2
+
+[node name="UserLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+text = "小明 · 二年级"
+
+[node name="WeekProgressLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+text = "本周已完成 0/0 关"
+
+[node name="WeekProgress" type="ProgressBar" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+custom_minimum_size = Vector2(0, 14)
+max_value = 10.0
+value = 0.0
+
+[node name="DailyTaskLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+text = "今日任务：完成 0 关（已完成 0/0）"
+
+[node name="Cards" type="VBoxContainer" parent="Margin/VBox"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+separation = 10
+
+[node name="NumberCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="VBox" type="VBoxContainer" parent="Margin/VBox/Cards/NumberCard"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox/Cards/NumberCard/VBox"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Icon" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox/Header"]
+text = "🔢"
+
+[node name="Title" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox/Header"]
+text = "数字规律闯关"
+size_flags_horizontal = 3
+
+[node name="Level" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox/Header"]
+text = "Lv.1"
+
+[node name="Subtitle" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox"]
+text = "练习数列、加减乘除找规律"
+
+[node name="Progress" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox"]
+text = "已通关：0 关｜已解锁：0/0"
+
+[node name="Tip" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox"]
+text = "今天推荐题型：等差数列"
+
+[node name="Footer" type="VBoxContainer" parent="Margin/VBox/Cards/NumberCard/VBox"]
+separation = 4
+
+[node name="QuickLabel" type="Label" parent="Margin/VBox/Cards/NumberCard/VBox/Footer"]
+text = "继续上一关：简单"
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/VBox/Cards/NumberCard/VBox/Footer"]
+separation = 8
+
+[node name="NumberStartButton" type="Button" parent="Margin/VBox/Cards/NumberCard/VBox/Footer/Buttons"]
+text = "选择难度"
+size_flags_horizontal = 3
+
+[node name="NumberContinueButton" type="Button" parent="Margin/VBox/Cards/NumberCard/VBox/Footer/Buttons"]
+text = "继续"
+size_flags_horizontal = 3
+
+[node name="ShapeCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="VBox" type="VBoxContainer" parent="Margin/VBox/Cards/ShapeCard"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox/Cards/ShapeCard/VBox"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Icon" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox/Header"]
+text = "🔶"
+
+[node name="Title" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox/Header"]
+text = "图形数字推理"
+size_flags_horizontal = 3
+
+[node name="Level" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox/Header"]
+text = "Lv.1"
+
+[node name="Subtitle" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox"]
+text = "九宫格、圆圈数阵、三角形阵"
+
+[node name="Progress" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox"]
+text = "已通关：0 关｜已解锁：0/0"
+
+[node name="Tip" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox"]
+text = "最近：圆圈数阵表现很棒！"
+
+[node name="Footer" type="VBoxContainer" parent="Margin/VBox/Cards/ShapeCard/VBox"]
+separation = 4
+
+[node name="QuickLabel" type="Label" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer"]
+text = "继续上一关：简单"
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer"]
+separation = 8
+
+[node name="ShapeStartButton" type="Button" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer/Buttons"]
+text = "选择难度"
+size_flags_horizontal = 3
+
+[node name="ShapeContinueButton" type="Button" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer/Buttons"]
+text = "继续"
+size_flags_horizontal = 3
+
+[node name="LetterCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="VBox" type="VBoxContainer" parent="Margin/VBox/Cards/LetterCard"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox/Cards/LetterCard/VBox"]
+size_flags_horizontal = 3
+separation = 6
+
+[node name="Icon" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox/Header"]
+text = "🔤"
+
+[node name="Title" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox/Header"]
+text = "字母规律实验室"
+size_flags_horizontal = 3
+
+[node name="Level" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox/Header"]
+text = "Lv.1"
+
+[node name="Subtitle" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox"]
+text = "A=1 编码、字母跳跃、简单密码"
+
+[node name="Progress" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox"]
+text = "已通关：0 关｜已解锁：0/0"
+
+[node name="Tip" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox"]
+text = "已掌握：A=1 编码"
+
+[node name="Footer" type="VBoxContainer" parent="Margin/VBox/Cards/LetterCard/VBox"]
+separation = 4
+
+[node name="QuickLabel" type="Label" parent="Margin/VBox/Cards/LetterCard/VBox/Footer"]
+text = "继续上一关：简单"
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/VBox/Cards/LetterCard/VBox/Footer"]
+separation = 8
+
+[node name="LetterStartButton" type="Button" parent="Margin/VBox/Cards/LetterCard/VBox/Footer/Buttons"]
+text = "选择难度"
+size_flags_horizontal = 3
+
+[node name="LetterContinueButton" type="Button" parent="Margin/VBox/Cards/LetterCard/VBox/Footer/Buttons"]
+text = "继续"
+size_flags_horizontal = 3
+
+[node name="BottomNav" type="HBoxContainer" parent="Margin/VBox"]
+size_flags_horizontal = 3
+alignment = 1
+separation = 8
+
+[node name="HomeButton" type="Button" parent="Margin/VBox/BottomNav"]
+text = "首页"
+
+[node name="ReportButton" type="Button" parent="Margin/VBox/BottomNav"]
+text = "学习报告"
+
+[node name="ParentsButton" type="Button" parent="Margin/VBox/BottomNav"]
+text = "家长专区"

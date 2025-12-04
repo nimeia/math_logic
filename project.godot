@@ -1,0 +1,26 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+
+config_version=5
+
+[application]
+config/name="Math Logic"
+run/main_scene="res://scenes/main.tscn"
+
+[autoload]
+Config="*res://scripts/core/config.gd"
+Logger="*res://scripts/core/logger.gd"
+SceneManager="*res://scripts/core/scene_manager.gd"
+Platform="*res://scripts/core/platform.gd"
+DeviceProfile="*res://scripts/core/device_profile.gd"
+InputSystem="*res://scripts/systems/input_system.gd"
+AudioSystem="*res://scripts/systems/audio_system.gd"
+SaveSystem="*res://scripts/systems/save_system.gd"
+UIManager="*res://scripts/systems/ui_manager.gd"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
