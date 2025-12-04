@@ -91,22 +91,41 @@ func _ready() -> void:
 		_letter_generator = LetterPatternGenerator.new()
 
 func _show_packed_scene(packed: PackedScene, scene_path: String) -> Control:
-	if packed == null:
-		AppLogger.error("UI screen not found: %s" % scene_path)
-		return Control.new()
-	var next := packed.instantiate() as Control
-	if next == null:
-		AppLogger.error("UI scene root must be Control: %s" % scene_path)
-		return Control.new()
-	if is_instance_valid(_current_screen):
-		var old_screen := _current_screen
-		_current_screen = Control.new()
-		if is_instance_valid(old_screen.get_parent()):
-			old_screen.get_parent().remove_child(old_screen)
-		old_screen.queue_free()
-	_current_screen = next
-	_screen_root.add_child(_current_screen)
-	return _current_screen
+        if packed == null:
+                AppLogger.error("UI screen not found: %s" % scene_path)
+                return Control.new()
+        var next := packed.instantiate() as Control
+        if next == null:
+                AppLogger.error("UI scene root must be Control: %s" % scene_path)
+                return Control.new()
+        if is_instance_valid(_current_screen):
+                var old_screen := _current_screen
+                _current_screen = Control.new()
+                if is_instance_valid(old_screen.get_parent()):
+                        old_screen.get_parent().remove_child(old_screen)
+                old_screen.queue_free()
+        _current_screen = next
+        _screen_root.add_child(_current_screen)
+        return _current_screen
+
+func show_screen(scene_path: String) -> Control:
+        var packed := ResourceLoader.load(scene_path) as PackedScene
+        if packed == null:
+                AppLogger.error("UI screen not found: %s" % scene_path)
+                return Control.new()
+        var next := packed.instantiate() as Control
+        if next == null:
+                AppLogger.error("UI scene root must be Control: %s" % scene_path)
+                return Control.new()
+        if is_instance_valid(_current_screen):
+                var old_screen := _current_screen
+                _current_screen = Control.new()
+                if is_instance_valid(old_screen.get_parent()):
+                        old_screen.get_parent().remove_child(old_screen)
+                old_screen.queue_free()
+        _current_screen = next
+        _screen_root.add_child(_current_screen)
+        return _current_screen
 
 func show_screen(scene_path: String) -> Control:
 	var packed := ResourceLoader.load(scene_path) as PackedScene
@@ -188,12 +207,12 @@ func _on_difficulty_selected(mode: String, difficulty: String) -> void:
 
 
 func _start_numbers_game(mode: String, difficulty: String) -> void:
-	var target: String = "res://ui/big_screen/screens/ui_number_game_big.tscn"
-	var packed: PackedScene = NUMBER_GAME_SCENE_BIG
-	if DeviceProfile.is_handheld():
-		target = "res://ui/handheld/screens/ui_number_game_handheld.tscn"
-		packed = NUMBER_GAME_SCENE_HANDHELD
-	var screen := _show_packed_scene(packed, target)
+        var target: String = "res://ui/big_screen/screens/ui_number_game_big.tscn"
+        var packed: PackedScene = NUMBER_GAME_SCENE_BIG
+        if DeviceProfile.is_handheld():
+                target = "res://ui/handheld/screens/ui_number_game_handheld.tscn"
+                packed = NUMBER_GAME_SCENE_HANDHELD
+        var screen := _show_packed_scene(packed, target)
 	if screen is UIScreenBase:
 		var gameplay_screen := screen as UIScreenBase
 		_connect_common_signals(gameplay_screen)
