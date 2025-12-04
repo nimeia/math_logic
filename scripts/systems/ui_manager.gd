@@ -127,6 +127,10 @@ func show_screen(scene_path: String) -> Control:
         _screen_root.add_child(_current_screen)
         return _current_screen
 
+func show_screen(scene_path: String) -> Control:
+	var packed := ResourceLoader.load(scene_path) as PackedScene
+	return _show_packed_scene(packed, scene_path)
+
 func show_main_menu() -> void:
 	var target: String = "res://ui/big_screen/screens/ui_main_menu_big.tscn"
 	if DeviceProfile.is_handheld():
@@ -199,6 +203,8 @@ func _on_difficulty_selected(mode: String, difficulty: String) -> void:
 		_preview_letters_puzzle(mode, difficulty, "difficulty_select")
 	else:
 		AppLogger.info("Difficulty selected: %s - %s" % [mode, difficulty])
+
+
 
 func _start_numbers_game(mode: String, difficulty: String) -> void:
         var target: String = "res://ui/big_screen/screens/ui_number_game_big.tscn"
