@@ -89,19 +89,23 @@ func _ready() -> void:
 		_letter_generator = LetterPatternGenerator.new()
 
 func show_screen(scene_path: String) -> Control:
-	var packed := ResourceLoader.load(scene_path) as PackedScene
-	if packed == null:
-		AppLogger.error("UI screen not found: %s" % scene_path)
-		return Control.new()
-	var next := packed.instantiate() as Control
-	if next == null:
-		AppLogger.error("UI scene root must be Control: %s" % scene_path)
-		return Control.new()
-	if is_instance_valid(_current_screen):
-		_current_screen.queue_free()
-	_current_screen = next
-	_screen_root.add_child(_current_screen)
-	return _current_screen
+        var packed := ResourceLoader.load(scene_path) as PackedScene
+        if packed == null:
+                AppLogger.error("UI screen not found: %s" % scene_path)
+                return Control.new()
+        var next := packed.instantiate() as Control
+        if next == null:
+                AppLogger.error("UI scene root must be Control: %s" % scene_path)
+                return Control.new()
+        if is_instance_valid(_current_screen):
+                var old_screen := _current_screen
+                _current_screen = Control.new()
+                if is_instance_valid(old_screen.get_parent()):
+                        old_screen.get_parent().remove_child(old_screen)
+                old_screen.queue_free()
+        _current_screen = next
+        _screen_root.add_child(_current_screen)
+        return _current_screen
 
 func show_main_menu() -> void:
 	var target: String = "res://ui/big_screen/screens/ui_main_menu_big.tscn"
