@@ -1,5 +1,4 @@
 extends Node
-class_name Config
 
 const CONFIG_DIR: String = "res://config"
 var _config_cache: Dictionary = {}
@@ -18,7 +17,7 @@ func load_config(file_name: String) -> Dictionary:
         return {}
 
     var text: String = file.get_as_text()
-    var parsed := JSON.parse_string(text)
+    var parsed: Variant = JSON.parse_string(text)
     if typeof(parsed) != TYPE_DICTIONARY:
         push_warning("Config file %s is not a dictionary" % path)
         _config_cache[file_name] = {}
