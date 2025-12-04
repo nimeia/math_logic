@@ -34,9 +34,9 @@ func _ready() -> void:
     _connect_card_signals()
 
 func set_profile_summary(summary: Dictionary) -> void:
-    var name: String = summary.get("name", "")
+    var player_name: String = summary.get("name", "")
     var grade: String = summary.get("grade", "")
-    user_label.text = "%s · %s" % [name, grade]
+    user_label.text = "%s · %s" % [player_name, grade]
     var week_done: int = summary.get("week_completed", 0)
     var week_target: int = max(1, summary.get("week_target", 1))
     week_progress.max_value = week_target
@@ -83,7 +83,7 @@ func _apply_card(mode: String, card: PanelContainer) -> void:
     title_label.text = data.get("title", "")
     level_label.text = data.get("level", "")
     subtitle_label.text = data.get("subtitle", "")
-    var unlocked := data.get("unlocked", {})
+    var unlocked: Dictionary = data.get("unlocked", {})
     var cleared: int = data.get("cleared", 0)
     progress_label.text = "已通关：%s 关｜已解锁：%s/%s" % [cleared, unlocked.get("current", 0), unlocked.get("total", 0)]
     tip_label.text = data.get("tip", "")

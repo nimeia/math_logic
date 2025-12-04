@@ -136,7 +136,8 @@ func _template_l1_4() -> Dictionary:
     var length: int = rng.randi_range(5, 6)
     var sequence: Array[String] = []
     for i in range(length):
-        sequence.append(_idx_to_char(i % 2 == 0 ? p : q))
+        var char_idx: int = p if i % 2 == 0 else q
+        sequence.append(_idx_to_char(char_idx))
     return _build_puzzle(sequence, "L1-4", sequence.size() - 1, {"p": p, "q": q, "length": length})
 
 func _template_l1_5() -> Dictionary:
@@ -229,7 +230,8 @@ func _template_l2_4() -> Dictionary:
         var base_idx: int = start_idx + i
         var cipher_idx: int = base_idx + shift
         base_letters.append(_idx_to_char(base_idx))
-        sequence.append("%s→%s" % [_idx_to_char(base_idx), i == length - 1 ? PLACEHOLDER : _idx_to_char(cipher_idx)])
+        var cipher_char: String = PLACEHOLDER if i == length - 1 else _idx_to_char(cipher_idx)
+        sequence.append("%s→%s" % [_idx_to_char(base_idx), cipher_char])
     var answer: String = _idx_to_char(start_idx + (length - 1) + shift)
     return {
         "template_id": "L2-4",
@@ -337,7 +339,8 @@ func _template_l3_4() -> Dictionary:
         var base_idx: int = start_idx + i * 2
         var cipher_idx: int = base_idx + shift
         base_letters.append(_idx_to_char(base_idx))
-        sequence.append("%s→%s" % [_idx_to_char(base_idx), i == 3 ? PLACEHOLDER : _idx_to_char(cipher_idx)])
+        var cipher_char: String = PLACEHOLDER if i == 3 else _idx_to_char(cipher_idx)
+        sequence.append("%s→%s" % [_idx_to_char(base_idx), cipher_char])
     var answer: String = _idx_to_char(_char_to_idx(base_letters.back()) + shift)
     return {
         "template_id": "L3-4",
@@ -378,11 +381,19 @@ func _template_l3_6() -> Dictionary:
         var idx_val: int = start_idx + i
         if idx_val > ALPHABET_COUNT:
             return {}
-        var number_val: int = relation_type == 1 ? idx_val + offset : idx_val * 2
+        var number_val: int = 0
+        if relation_type == 1:
+            number_val = idx_val + offset
+        else:
+            number_val = idx_val * 2
         if number_val <= 0 or number_val > 100:
             return {}
-        var mapping := "%s→%s" % [_idx_to_char(idx_val), relation_type == 1 ? str(number_val) : str(number_val)]
+        var mapping := "%s→%s" % [_idx_to_char(idx_val), str(number_val)]
         sequence.append(mapping)
     var missing: int = sequence.size() - 1
-    var answer_number: int = relation_type == 1 ? (start_idx + missing + offset) : (start_idx + missing) * 2
+    var answer_number: int = 0
+    if relation_type == 1:
+        answer_number = start_idx + missing + offset
+    else:
+        answer_number = (start_idx + missing) * 2
     return _build_puzzle(sequence, "L3-6", missing, {"relation": relation_type, "offset": offset, "start": start_idx}, answer_number)

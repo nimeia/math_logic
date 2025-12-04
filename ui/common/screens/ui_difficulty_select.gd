@@ -21,8 +21,8 @@ func set_mode(mode: String, mode_data: Dictionary) -> void:
     var title: String = mode_data.get("title", "")
     title_label.text = "选择难度 · %s" % title
     subtitle_label.text = mode_data.get("subtitle", "")
-    var unlocked := mode_data.get("unlocked", {})
-    var unlocked_text := "已解锁关卡：%s / %s" % [unlocked.get("current", 0), unlocked.get("total", 0)]
+    var unlocked: Dictionary = mode_data.get("unlocked", {}) as Dictionary
+    var unlocked_text: String = "已解锁关卡：%s / %s" % [unlocked.get("current", 0), unlocked.get("total", 0)]
     var level: String = mode_data.get("level", "")
     unlocked_label.text = "%s  %s" % [unlocked_text, level]
     tip_label.text = mode_data.get("tip", "今日推荐：保持练习！")

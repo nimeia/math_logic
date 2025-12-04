@@ -365,13 +365,15 @@ func _template_l3_5() -> Dictionary:
     return _build_puzzle(seq, "L3-5", missing, {"a": a, "b": b, "c": c, "start_n": start_n})
 
 func _template_l3_6() -> Dictionary:
-    var a1: int = rng.randi_range(1, 9)
-    var k: int = rng.randi_range(2, 3)
-    var m: int = rng.randi_range(1, 5)
-    var sign: int = rng.randf() < 0.5 ? 1 : -1
-    var seq: Array[int] = [a1]
-    while seq.size() < 6:
-        var next: int = seq.back() * k + sign * m
+	var a1: int = rng.randi_range(1, 9)
+	var k: int = rng.randi_range(2, 3)
+	var m: int = rng.randi_range(1, 5)
+	var sign: int = 1
+	if rng.randf() < 0.5:
+		sign = -1
+	var seq: Array[int] = [a1]
+	while seq.size() < 6:
+		var next: int = seq.back() * k + sign * m
         if next < 0 or next > 1000:
             return {}
         seq.append(next)
@@ -380,15 +382,19 @@ func _template_l3_6() -> Dictionary:
 
 func _template_l3_7() -> Dictionary:
     var a1: int = rng.randi_range(1, 9)
-    var add: int = rng.randi_range(1, 5)
-    var k: int = rng.randi_range(2, 3)
-    var seq: Array[int] = [a1]
-    var toggle_add := true
-    while seq.size() < 7:
-        var next: int = toggle_add ? seq.back() + add : seq.back() * k
-        toggle_add = not toggle_add
-        if next > 1000:
-            return {}
+	var add: int = rng.randi_range(1, 5)
+	var k: int = rng.randi_range(2, 3)
+	var seq: Array[int] = [a1]
+	var toggle_add := true
+	while seq.size() < 7:
+		var next: int
+		if toggle_add:
+			next = seq.back() + add
+		else:
+			next = seq.back() * k
+		toggle_add = not toggle_add
+		if next > 1000:
+			return {}
         seq.append(next)
     var missing: int = _select_missing(seq.size(), true, [4], 0.65)
     return _build_puzzle(seq, "L3-7", missing, {"a1": a1, "add": add, "k": k})
