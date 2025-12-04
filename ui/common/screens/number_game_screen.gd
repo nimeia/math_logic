@@ -1,4 +1,4 @@
-extends UIScreenBase
+extends "res://scripts/systems/ui_screen_base.gd"
 class_name NumberGameScreen
 
 signal request_back
