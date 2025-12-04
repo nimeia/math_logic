@@ -139,20 +139,20 @@ func _on_request_difficulty(mode: String) -> void:
 	show_difficulty_select(mode)
 
 func _on_request_quick_start(mode: String) -> void:
-    if mode == MODE_NUMBERS:
-        var data: Dictionary = _mode_progress_data.get(mode, {})
-        var last_diff: String = data.get("last_difficulty", "easy")
-        _start_numbers_game(mode, last_diff)
-    elif mode == MODE_SHAPES:
-        var shapes_data: Dictionary = _mode_progress_data.get(mode, {})
-        var shapes_last_diff: String = shapes_data.get("last_difficulty", "easy")
-        _preview_shapes_puzzle(mode, shapes_last_diff, "quick_start")
-    elif mode == MODE_LETTERS:
-        var letters_data: Dictionary = _mode_progress_data.get(mode, {})
-        var letters_last_diff: String = letters_data.get("last_difficulty", "easy")
-        _preview_letters_puzzle(mode, letters_last_diff, "quick_start")
-    else:
-        AppLogger.info("Quick start requested for mode: %s" % mode)
+	if mode == MODE_NUMBERS:
+		var data: Dictionary = _mode_progress_data.get(mode, {})
+		var last_diff: String = data.get("last_difficulty", "easy")
+		_start_numbers_game(mode, last_diff)
+	elif mode == MODE_SHAPES:
+		var shapes_data: Dictionary = _mode_progress_data.get(mode, {})
+		var shapes_last_diff: String = shapes_data.get("last_difficulty", "easy")
+		_preview_shapes_puzzle(mode, shapes_last_diff, "quick_start")
+	elif mode == MODE_LETTERS:
+		var letters_data: Dictionary = _mode_progress_data.get(mode, {})
+		var letters_last_diff: String = letters_data.get("last_difficulty", "easy")
+		_preview_letters_puzzle(mode, letters_last_diff, "quick_start")
+	else:
+		AppLogger.info("Quick start requested for mode: %s" % mode)
 
 func _on_request_navigate(destination: String) -> void:
 	AppLogger.info("Navigate to: %s" % destination)
@@ -164,30 +164,30 @@ func _on_quit_requested() -> void:
 	AppLogger.info("Quit requested from UI")
 
 func _on_difficulty_selected(mode: String, difficulty: String) -> void:
-    if mode == MODE_NUMBERS:
-        _mode_progress_data[mode]["last_difficulty"] = difficulty
-        _start_numbers_game(mode, difficulty)
-    elif mode == MODE_SHAPES:
-        _mode_progress_data[mode]["last_difficulty"] = difficulty
-        _preview_shapes_puzzle(mode, difficulty, "difficulty_select")
-    elif mode == MODE_LETTERS:
-        _mode_progress_data[mode]["last_difficulty"] = difficulty
-        _preview_letters_puzzle(mode, difficulty, "difficulty_select")
-    else:
-        AppLogger.info("Difficulty selected: %s - %s" % [mode, difficulty])
+	if mode == MODE_NUMBERS:
+		_mode_progress_data[mode]["last_difficulty"] = difficulty
+		_start_numbers_game(mode, difficulty)
+	elif mode == MODE_SHAPES:
+		_mode_progress_data[mode]["last_difficulty"] = difficulty
+		_preview_shapes_puzzle(mode, difficulty, "difficulty_select")
+	elif mode == MODE_LETTERS:
+		_mode_progress_data[mode]["last_difficulty"] = difficulty
+		_preview_letters_puzzle(mode, difficulty, "difficulty_select")
+	else:
+		AppLogger.info("Difficulty selected: %s - %s" % [mode, difficulty])
 
 func _start_numbers_game(mode: String, difficulty: String) -> void:
-    var target: String = "res://ui/big_screen/screens/ui_number_game_big.tscn"
-    if DeviceProfile.is_handheld():
-        target = "res://ui/handheld/screens/ui_number_game_handheld.tscn"
-    var screen := show_screen(target)
-    if screen is UIScreenBase:
-        var gameplay_screen := screen as UIScreenBase
-        _connect_common_signals(gameplay_screen)
-    if screen.has_method("configure"):
-        screen.call("configure", mode, difficulty)
-    if screen.has_signal("request_back"):
-        screen.connect("request_back", Callable(self, "show_main_menu"))
+	var target: String = "res://ui/big_screen/screens/ui_number_game_big.tscn"
+	if DeviceProfile.is_handheld():
+		target = "res://ui/handheld/screens/ui_number_game_handheld.tscn"
+	var screen := show_screen(target)
+	if screen is UIScreenBase:
+		var gameplay_screen := screen as UIScreenBase
+		_connect_common_signals(gameplay_screen)
+	if screen.has_method("configure"):
+		screen.call("configure", mode, difficulty)
+	if screen.has_signal("request_back"):
+		screen.connect("request_back", Callable(self, "show_main_menu"))
 
 func _preview_numbers_puzzle(mode: String, difficulty: String, reason: String) -> void:
 	if _number_generator == null:
