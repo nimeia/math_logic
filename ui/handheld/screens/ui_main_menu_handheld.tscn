@@ -39,6 +39,7 @@ text = "练数字 · 玩图形 · 玩转字母规律"
 theme_override_font_sizes/font_size = 14
 
 [node name="SettingsButton" type="Button" parent="Margin/VBox/Top/TitleRow"]
+unique_name_in_owner = true
 text = "⚙"
 size_flags_horizontal = 1
 
@@ -55,17 +56,21 @@ size_flags_horizontal = 3
 separation = 2
 
 [node name="UserLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+unique_name_in_owner = true
 text = "小明 · 二年级"
 
 [node name="WeekProgressLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+unique_name_in_owner = true
 text = "本周已完成 0/0 关"
 
 [node name="WeekProgress" type="ProgressBar" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 14)
 max_value = 10.0
 value = 0.0
 
 [node name="DailyTaskLabel" type="Label" parent="Margin/VBox/Top/UserInfo/UserVBox"]
+unique_name_in_owner = true
 text = "今日任务：完成 0 关（已完成 0/0）"
 
 [node name="Cards" type="VBoxContainer" parent="Margin/VBox"]
@@ -74,6 +79,7 @@ size_flags_vertical = 3
 separation = 10
 
 [node name="NumberCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
@@ -114,14 +120,17 @@ text = "继续上一关：简单"
 separation = 8
 
 [node name="NumberStartButton" type="Button" parent="Margin/VBox/Cards/NumberCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "选择难度"
 size_flags_horizontal = 3
 
 [node name="NumberContinueButton" type="Button" parent="Margin/VBox/Cards/NumberCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "继续"
 size_flags_horizontal = 3
 
 [node name="ShapeCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
@@ -162,14 +171,17 @@ text = "继续上一关：简单"
 separation = 8
 
 [node name="ShapeStartButton" type="Button" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "选择难度"
 size_flags_horizontal = 3
 
 [node name="ShapeContinueButton" type="Button" parent="Margin/VBox/Cards/ShapeCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "继续"
 size_flags_horizontal = 3
 
 [node name="LetterCard" type="PanelContainer" parent="Margin/VBox/Cards"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
@@ -210,10 +222,12 @@ text = "继续上一关：简单"
 separation = 8
 
 [node name="LetterStartButton" type="Button" parent="Margin/VBox/Cards/LetterCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "选择难度"
 size_flags_horizontal = 3
 
 [node name="LetterContinueButton" type="Button" parent="Margin/VBox/Cards/LetterCard/VBox/Footer/Buttons"]
+unique_name_in_owner = true
 text = "继续"
 size_flags_horizontal = 3
 
@@ -223,10 +237,13 @@ alignment = 1
 separation = 8
 
 [node name="HomeButton" type="Button" parent="Margin/VBox/BottomNav"]
+unique_name_in_owner = true
 text = "首页"
 
 [node name="ReportButton" type="Button" parent="Margin/VBox/BottomNav"]
+unique_name_in_owner = true
 text = "学习报告"
 
 [node name="ParentsButton" type="Button" parent="Margin/VBox/BottomNav"]
+unique_name_in_owner = true
 text = "家长专区"

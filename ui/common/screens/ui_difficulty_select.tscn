@@ -26,17 +26,21 @@ separation = 16
 size_flags_horizontal = 3
 
 [node name="TitleLabel" type="Label" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
 text = "选择难度"
 horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
 theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 
 [node name="UnlockedLabel" type="Label" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
 horizontal_alignment = 1
 
 [node name="TipLabel" type="Label" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
 horizontal_alignment = 1
 
 [node name="DifficultyList" type="VBoxContainer" parent="Margin/VBox"]
@@ -53,6 +57,7 @@ text = "🌱 简单"
 size_flags_horizontal = 3
 
 [node name="EasyProgress" type="Label" parent="Margin/VBox/DifficultyList/Easy"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 horizontal_alignment = 2
 
@@ -65,6 +70,7 @@ text = "🌿 中等"
 size_flags_horizontal = 3
 
 [node name="MediumProgress" type="Label" parent="Margin/VBox/DifficultyList/Medium"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 horizontal_alignment = 2
 
@@ -77,6 +83,7 @@ text = "🌳 挑战"
 size_flags_horizontal = 3
 
 [node name="HardProgress" type="Label" parent="Margin/VBox/DifficultyList/Hard"]
+unique_name_in_owner = true
 size_flags_horizontal = 3
 horizontal_alignment = 2
 
