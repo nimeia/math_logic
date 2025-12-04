@@ -80,7 +80,7 @@ func _load_new_puzzle() -> void:
     sequence_label.text = "  ,  ".join(sequence_texts)
     var template_id: String = _current_puzzle.get("template_id", "")
     var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
-    var template_hint := _template_hints.get(template_id, "")
+    var template_hint: String = _template_hints.get(template_id, "") as String
     if template_hint != "":
         hint_text += " ｜提示：%s" % template_hint
     hint_label.text = hint_text
