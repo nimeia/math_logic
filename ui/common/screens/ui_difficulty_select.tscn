@@ -5,6 +5,7 @@
 [node name="DifficultySelect" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/default_font_size = 32
 script = ExtResource("1")
 
 [node name="Margin" type="MarginContainer" parent="."]
@@ -32,7 +33,7 @@ horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="Margin/VBox/Header"]
 unique_name_in_owner = true
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 28
 horizontal_alignment = 1
 
 [node name="UnlockedLabel" type="Label" parent="Margin/VBox/Header"]
@@ -42,6 +43,14 @@ horizontal_alignment = 1
 [node name="TipLabel" type="Label" parent="Margin/VBox/Header"]
 unique_name_in_owner = true
 horizontal_alignment = 1
+
+[node name="SettingsRow" type="HBoxContainer" parent="Margin/VBox/Header"]
+alignment = 1
+
+[node name="AutoFontButton" type="Button" parent="Margin/VBox/Header/SettingsRow"]
+unique_name_in_owner = true
+text = "字体大小自动调整"
+size_flags_horizontal = 3
 
 [node name="DifficultyList" type="VBoxContainer" parent="Margin/VBox"]
 size_flags_horizontal = 3
