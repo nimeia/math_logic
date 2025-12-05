@@ -1,4 +1,4 @@
-extends UIScreenBase
+extends "res://scripts/systems/ui_screen_base.gd"
 
 const MODE_NUMBERS := "numbers"
 const MODE_SHAPES := "shapes"
