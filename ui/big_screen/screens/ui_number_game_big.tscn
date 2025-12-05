@@ -52,6 +52,88 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 autowrap_mode = 2
 
+[node name="ShapeGrid" type="GridContainer" parent="Layout/VBox"]
+unique_name_in_owner = true
+visible = false
+columns = 3
+custom_constants/h_separation = 8
+custom_constants/v_separation = 8
+custom_minimum_size = Vector2(0, 240)
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Cell1" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell2" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell3" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell4" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell5" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell6" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell7" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell8" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
+[node name="Cell9" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(80, 72)
+
 [node name="HintLabel" type="Label" parent="Layout/VBox"]
 unique_name_in_owner = true
 text = "题型 L1-1 · 填写 ?"

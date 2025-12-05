@@ -108,6 +108,7 @@ var _template_hints := {
 @onready var title_label: Label = %TitleLabel
 @onready var subtitle_label: Label = %SubtitleLabel
 @onready var sequence_label: Label = %SequenceLabel
+@onready var shape_grid: GridContainer = %ShapeGrid
 @onready var hint_label: Label = %HintLabel
 @onready var feedback_label: Label = %FeedbackLabel
 @onready var rule_button: Button = %RuleButton
@@ -128,6 +129,8 @@ var _template_hints := {
         %Option4
 ]
 
+var _shape_cells: Array[Label] = []
+
 func _ready() -> void:
     super._ready()
     _rng.randomize()
@@ -139,6 +142,7 @@ func _ready() -> void:
     _wire_button(rule_button, Callable(self, "_on_rule_pressed"))
     for button in option_buttons:
         _wire_button(button, Callable(self, "_on_option_selected"), button)
+    _collect_shape_cells()
     _init_font_scaling()
     _update_titles()
     if _current_puzzle.is_empty():
@@ -178,6 +182,7 @@ func _init_font_scaling() -> void:
             title_label,
             subtitle_label,
             sequence_label,
+            shape_grid,
             hint_label,
             feedback_label,
             rule_button,
@@ -188,6 +193,7 @@ func _init_font_scaling() -> void:
             refresh_button,
             next_button,
     ]
+    _font_targets.append_array(_shape_cells)
     _font_targets.append_array(_valid_option_buttons())
     for node in _font_targets:
             if node == null:
@@ -217,7 +223,8 @@ func _load_new_puzzle() -> void:
         _lock_options(true)
         return
     var display = _current_puzzle.get("display", [])
-    sequence_label.text = _format_display(display)
+    var structure: String = _current_puzzle.get("metadata", {}).get("structure", "")
+    _render_display(display, structure)
     var template_id: String = _current_puzzle.get("template_id", "")
     var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
     var template_hint: String = _template_hint_for(template_id)
@@ -237,6 +244,29 @@ func _valid_option_buttons() -> Array[Button]:
         if btn != null:
             buttons.append(btn)
     return buttons
+
+func _collect_shape_cells() -> void:
+    _shape_cells.clear()
+    if shape_grid == null:
+        return
+    for child in shape_grid.get_children():
+        if child is Label:
+            var lbl: Label = child
+            _shape_cells.append(lbl)
+
+func _render_display(display, structure: String) -> void:
+    var show_shapes := _mode == "shapes"
+    if shape_grid != null:
+        shape_grid.visible = show_shapes
+    sequence_label.visible = not show_shapes
+    if show_shapes:
+        var drawn := _draw_shape_display(display, structure)
+        if drawn:
+            return
+        sequence_label.visible = true
+        if shape_grid != null:
+            shape_grid.visible = false
+    sequence_label.text = _format_display(display)
 
 func _difficulty_label() -> String:
         match _difficulty:
@@ -312,6 +342,112 @@ func _format_value(value) -> String:
                 if text_value.is_empty():
                         text_value = PLACEHOLDER_TEXT
         return text_value
+
+func _draw_shape_display(display, structure: String) -> bool:
+        _clear_shape_grid()
+        if shape_grid == null:
+                return false
+        if not (display is Dictionary):
+                return false
+        var structure_hint := structure.to_lower()
+        var placed := 0
+        for key in display.keys():
+                var base_key := _base_cell_key(str(key))
+                var pos: Vector2i = _shape_position_for(base_key, structure_hint, display)
+                if pos.x < 0 or pos.y < 0:
+                        continue
+                var idx: int = pos.y * 3 + pos.x
+                if idx < 0 or idx >= _shape_cells.size():
+                        continue
+                var cell: Label = _shape_cells[idx]
+                if cell == null:
+                        continue
+                cell.visible = true
+                cell.text = _format_value(display[key])
+                placed += 1
+        return placed > 0
+
+func _clear_shape_grid() -> void:
+        for cell in _shape_cells:
+                if cell == null:
+                        continue
+                cell.text = ""
+                cell.visible = false
+
+func _base_cell_key(key: String) -> String:
+        var underscore := key.find("_")
+        if underscore != -1 and underscore < key.length() - 1:
+                return key.substr(underscore + 1, key.length() - underscore - 1)
+        return key
+
+func _shape_position_for(base_key: String, structure_hint: String, display: Dictionary) -> Vector2i:
+        if base_key.length() >= 4 and base_key.begins_with("r") and base_key.substr(2, 1) == "c":
+                var row := int(base_key.substr(1, 1)) - 1
+                var col := int(base_key.substr(3, 1)) - 1
+                if row >= 0 and row < 3 and col >= 0 and col < 3:
+                        return Vector2i(col, row)
+        var triangle_layout := structure_hint.find("triangle") != -1
+        if triangle_layout or (display.has("T") and display.has("L") and display.has("R")):
+                match base_key:
+                        "T":
+                                return Vector2i(1, 0)
+                        "L":
+                                return Vector2i(0, 2)
+                        "R":
+                                return Vector2i(2, 2)
+                        "C", "S", "X":
+                                return Vector2i(1, 1)
+                        "A":
+                                return Vector2i(1, 0)
+                        "B":
+                                return Vector2i(0, 1)
+                        "C":
+                                return Vector2i(2, 1)
+                        "D":
+                                return Vector2i(0, 2)
+                        "E":
+                                return Vector2i(2, 2)
+                        "F":
+                                return Vector2i(1, 2)
+                return Vector2i(-1, -1)
+        if structure_hint.find("square") != -1:
+                match base_key:
+                        "A":
+                                return Vector2i(0, 0)
+                        "B":
+                                return Vector2i(2, 0)
+                        "C":
+                                return Vector2i(0, 2)
+                        "D":
+                                return Vector2i(2, 2)
+                        "E", "S":
+                                return Vector2i(1, 1)
+                # fall through to cross mapping for UDLR keys
+        if structure_hint.find("circle") != -1:
+                match base_key:
+                        "A":
+                                return Vector2i(0, 1)
+                        "B":
+                                return Vector2i(2, 1)
+                        "C":
+                                return Vector2i(0, 0)
+                        "D":
+                                return Vector2i(2, 0)
+                        "X", "S":
+                                return Vector2i(1, 1)
+                return Vector2i(-1, -1)
+        match base_key:
+                "L":
+                        return Vector2i(0, 1)
+                "R":
+                        return Vector2i(2, 1)
+                "U", "T":
+                        return Vector2i(1, 0)
+                "D":
+                        return Vector2i(1, 2)
+                "C", "S":
+                        return Vector2i(1, 1)
+        return Vector2i(-1, -1)
 
 func _on_option_selected(button: Button) -> void:
         if not _allow_input:
