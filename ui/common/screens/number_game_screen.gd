@@ -115,6 +115,9 @@ var _template_hints := {
 @onready var rule_button: Button = %RuleButton
 @onready var rule_popup: PopupPanel = %RulePopup
 @onready var rule_label: Label = %RuleLabel
+@onready var solution_button: Button = %SolutionButton
+@onready var solution_popup: PopupPanel = %SolutionPopup
+@onready var solution_label: Label = %SolutionLabel
 @onready var settings_button: Button = %SettingsButton
 @onready var settings_popup: PopupPanel = %SettingsPopup
 @onready var close_settings_button: Button = %CloseSettingsButton
@@ -141,6 +144,7 @@ func _ready() -> void:
     _wire_button(next_button, Callable(self, "_on_next_pressed"))
     _wire_button(close_settings_button, Callable(settings_popup, "hide"))
     _wire_button(rule_button, Callable(self, "_on_rule_pressed"))
+    _wire_button(solution_button, Callable(self, "_on_solution_pressed"))
     for button in option_buttons:
         _wire_button(button, Callable(self, "_on_option_selected"), button)
     _collect_shape_cells()
@@ -188,6 +192,8 @@ func _init_font_scaling() -> void:
             feedback_label,
             rule_button,
             rule_label,
+            solution_button,
+            solution_label,
             settings_button,
             close_settings_button,
             back_button,
@@ -223,6 +229,7 @@ func _load_new_puzzle() -> void:
         feedback_label.text = ""
         _lock_options(true)
         return
+    _hide_solution()
     var display = _current_puzzle.get("display", [])
     var structure: String = _current_puzzle.get("metadata", {}).get("structure", "")
     _log_puzzle(display, _current_puzzle.get("template_id", ""), _current_puzzle.get("answer", ""), structure)
@@ -470,6 +477,7 @@ func _handle_correct(button: Button) -> void:
         button.modulate = Color(0.18, 0.6, 0.24)
         _lock_options(true)
         next_button.disabled = false
+        _show_solution_button()
 
 func _handle_incorrect(button: Button, answer) -> void:
         feedback_label.text = "再想想：%s 不是正确答案" % str(button.text)
@@ -477,6 +485,7 @@ func _handle_incorrect(button: Button, answer) -> void:
         button.disabled = true
         button.modulate = Color(0.7, 0.7, 0.7)
         _show_rule_button()
+        _show_solution_button()
 
 func _lock_options(state: bool) -> void:
         for btn in _valid_option_buttons():
@@ -497,6 +506,9 @@ func _on_settings_pressed() -> void:
 
 func _on_rule_pressed() -> void:
         _show_rule_popup()
+
+func _on_solution_pressed() -> void:
+        _show_solution_popup()
 
 func _on_font_slider_changed(value: float) -> void:
         _set_font_scale(value)
@@ -525,6 +537,12 @@ func _show_rule_button() -> void:
 func _show_rule_popup() -> void:
         if rule_popup != null:
                 rule_popup.popup_centered()
+
+func _show_solution_popup() -> void:
+        if solution_label != null:
+                solution_label.text = _build_solution_text()
+        if solution_popup != null:
+                solution_popup.popup_centered()
 
 func _update_font_value_label() -> void:
         if font_value_label != null:
@@ -573,3 +591,28 @@ func _log_puzzle(display, template_id: String, answer, structure: String) -> voi
         if not meta_bits.is_empty():
                 meta_text = " (%s)" % ", ".join(meta_bits)
         AppLogger.info("生成题目[%s/%s] %s%s -> %s | 答案:%s" % [mode_label, _difficulty, template_id, meta_text, rendered, str(answer)])
+
+func _show_solution_button() -> void:
+        if solution_button != null:
+                solution_button.visible = true
+
+func _hide_solution() -> void:
+        if solution_button != null:
+                solution_button.visible = false
+        if solution_popup != null:
+                solution_popup.hide()
+
+func _build_solution_text() -> String:
+        if _current_puzzle.is_empty():
+                return "暂无题目"
+        var template_id: String = _current_puzzle.get("template_id", "")
+        var answer = _current_puzzle.get("answer", PLACEHOLDER_TEXT)
+        var rules: Dictionary = _template_rules.get(_mode, {})
+        var rule_text: String = rules.get(template_id, "暂无规则说明")
+        var details: Array[String] = []
+        if not template_id.is_empty():
+                details.append("题型 %s" % template_id)
+        details.append("完整数据：%s" % _format_display(_current_puzzle.get("sequence", _current_puzzle.get("cells", _current_puzzle.get("display", [])))))
+        details.append("答案填入：%s" % str(answer))
+        details.append("计算规律：%s" % rule_text)
+        return "\n".join(details)
