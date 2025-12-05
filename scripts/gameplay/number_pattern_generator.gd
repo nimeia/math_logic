@@ -56,7 +56,10 @@ func generate_puzzle(difficulty: String) -> Dictionary:
 func _build_puzzle(sequence: Array, template_id: String, missing_index: int, metadata: Dictionary = {}) -> Dictionary:
     if missing_index < 0 or missing_index >= sequence.size():
         return {}
-    var display := sequence.duplicate()
+    var display: Array = []
+    display.resize(sequence.size())
+    for i in range(sequence.size()):
+        display[i] = sequence[i]
     display[missing_index] = PLACEHOLDER
     return {
         "template_id": template_id,

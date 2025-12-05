@@ -12,6 +12,9 @@ var _current_puzzle: Dictionary = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _generator: NumberPatternGenerator = NumberPatternGenerator.new()
 var _allow_input: bool = true
+var _font_scale: float = 2.0
+var _font_targets: Array[CanvasItem] = []
+var _base_font_sizes: Dictionary = {}
 
 var _template_hints := {
         "L3-1": "差值也在变大，注意第二层的等差变化",
@@ -30,6 +33,10 @@ var _template_hints := {
 @onready var hint_label: Label = %HintLabel
 @onready var feedback_label: Label = %FeedbackLabel
 @onready var settings_button: Button = %SettingsButton
+@onready var settings_popup: PopupPanel = %SettingsPopup
+@onready var close_settings_button: Button = %CloseSettingsButton
+@onready var font_slider: HSlider = %FontSlider
+@onready var font_value_label: Label = %FontValueLabel
 @onready var back_button: Button = %BackButton
 @onready var refresh_button: Button = %RefreshButton
 @onready var next_button: Button = %NextButton
@@ -41,58 +48,98 @@ var _template_hints := {
 ]
 
 func _ready() -> void:
-	super._ready()
-	_rng.randomize()
-	_wire_button(settings_button, Callable(self, "_on_settings_pressed"))
-	_wire_button(back_button, Callable(self, "_on_back_pressed"))
-	_wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
-	_wire_button(next_button, Callable(self, "_on_next_pressed"))
-	for button in option_buttons:
-		_wire_button(button, Callable(self, "_on_option_selected"), button)
-	_update_titles()
-	if _current_puzzle.is_empty():
-		_load_new_puzzle()
-func _wire_button(button: Button, callable: Callable, argument = null) -> void:
-	if button == null:
-		push_warning("Button not found for %s" % callable.get_method())
-		return
-	if argument == null:
-		button.pressed.connect(callable)
-	else:
-		button.pressed.connect(func() -> void: callable.call(argument))
-func configure(mode: String, difficulty: String = "easy") -> void:
-        _mode = mode
-        _difficulty = difficulty
-        _update_titles()
+    super._ready()
+    _rng.randomize()
+    _wire_button(settings_button, Callable(self, "_on_settings_pressed"))
+    _wire_button(back_button, Callable(self, "_on_back_pressed"))
+    _wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
+    _wire_button(next_button, Callable(self, "_on_next_pressed"))
+    _wire_button(close_settings_button, Callable(settings_popup, "hide"))
+    for button in option_buttons:
+        _wire_button(button, Callable(self, "_on_option_selected"), button)
+    _init_font_scaling()
+    _update_titles()
+    if _current_puzzle.is_empty():
         _load_new_puzzle()
+func _wire_button(button: Button, callable: Callable, argument = null) -> void:
+    if button == null:
+        push_warning("Button not found for %s" % callable.get_method())
+        return
+    if argument == null:
+        button.pressed.connect(callable)
+    else:
+        button.pressed.connect(func() -> void: callable.call(argument))
+func configure(mode: String, difficulty: String = "easy") -> void:
+    _mode = mode
+    _difficulty = difficulty
+    # When invoked before the scene is ready, delay UI updates until _ready runs.
+    if not is_node_ready():
+        return
+    _update_titles()
+    _load_new_puzzle()
 
 func _update_titles() -> void:
-        title_label.text = "数字规律闯关"
-        var diff_label := _difficulty_label()
-        subtitle_label.text = "%s · 根据数列规律填空" % diff_label
+    title_label.text = "数字规律闯关"
+    var diff_label := _difficulty_label()
+    subtitle_label.text = "%s · 根据数列规律填空" % diff_label
+
+func _init_font_scaling() -> void:
+    _font_targets = [
+            title_label,
+            subtitle_label,
+            sequence_label,
+            hint_label,
+            feedback_label,
+            settings_button,
+            close_settings_button,
+            back_button,
+            refresh_button,
+            next_button,
+    ]
+    _font_targets.append_array(_valid_option_buttons())
+    for node in _font_targets:
+            if node == null:
+                    continue
+            var base_size: int = node.get_theme_font_size("font_size")
+            _base_font_sizes[node.get_instance_id()] = base_size
+    _set_font_scale(_font_scale)
+    if font_slider != null:
+            font_slider.min_value = 1.0
+            font_slider.max_value = 3.0
+            font_slider.step = 0.1
+            font_slider.value = _font_scale
+            font_slider.value_changed.connect(_on_font_slider_changed)
+    _update_font_value_label()
 
 func _load_new_puzzle() -> void:
-	_allow_input = true
-	_current_puzzle = _generator.generate_puzzle(_difficulty)
-	if _current_puzzle.is_empty():
-		sequence_label.text = "暂时没有生成题目，请重试"
-		hint_label.text = ""
-		feedback_label.text = ""
-		_lock_options(true)
-		return
-	var display: Array = _current_puzzle.get("display", [])
-	var sequence_texts: Array[String] = []
-	for value in display:
-		sequence_texts.append(str(value))
-	sequence_label.text = "  ,  ".join(sequence_texts)
-	var template_id: String = _current_puzzle.get("template_id", "")
-	var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
-	var template_hint: String = _template_hints.get(template_id, "") as String
-	if template_hint != "":
-		hint_text += " ｜提示：%s" % template_hint
-	hint_label.text = hint_text
-	feedback_label.text = "请选择正确的数字"
-	_apply_options(int(_current_puzzle.get("answer", 0)))
+    _allow_input = true
+    _current_puzzle = _generator.generate_puzzle(_difficulty)
+    if _current_puzzle.is_empty():
+        sequence_label.text = "暂时没有生成题目，请重试"
+        hint_label.text = ""
+        feedback_label.text = ""
+        _lock_options(true)
+        return
+    var display: Array = _current_puzzle.get("display", [])
+    var sequence_texts: Array[String] = []
+    for value in display:
+        sequence_texts.append(str(value))
+    sequence_label.text = "  ,  ".join(sequence_texts)
+    var template_id: String = _current_puzzle.get("template_id", "")
+    var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
+    var template_hint: String = _template_hints.get(template_id, "") as String
+    if template_hint != "":
+        hint_text += " ｜提示：%s" % template_hint
+    hint_label.text = hint_text
+    feedback_label.text = "请选择正确的数字"
+    _apply_options(int(_current_puzzle.get("answer", 0)))
+
+func _valid_option_buttons() -> Array[Button]:
+    var buttons: Array[Button] = []
+    for btn in option_buttons:
+        if btn != null:
+            buttons.append(btn)
+    return buttons
 
 func _difficulty_label() -> String:
         match _difficulty:
@@ -163,13 +210,31 @@ func _lock_options(state: bool) -> void:
                 btn.disabled = state
 
 func _on_refresh_pressed() -> void:
-        _load_new_puzzle()
+    _load_new_puzzle()
 
 func _on_next_pressed() -> void:
-        _load_new_puzzle()
+    _load_new_puzzle()
 
 func _on_back_pressed() -> void:
-        request_back.emit()
+    request_back.emit()
 
 func _on_settings_pressed() -> void:
-        request_open_settings.emit()
+        if settings_popup != null:
+                settings_popup.popup_centered()
+
+func _on_font_slider_changed(value: float) -> void:
+        _set_font_scale(value)
+
+func _set_font_scale(value: float) -> void:
+        _font_scale = value
+        for node in _font_targets:
+                if node == null:
+                        continue
+                var base_size: int = _base_font_sizes.get(node.get_instance_id(), node.get_theme_font_size("font_size"))
+                var scaled: int = int(round(base_size * _font_scale))
+                node.add_theme_font_size_override("font_size", scaled)
+        _update_font_value_label()
+
+func _update_font_value_label() -> void:
+        if font_value_label != null:
+                font_value_label.text = "%.1fx" % _font_scale
