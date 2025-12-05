@@ -4,54 +4,105 @@ class_name NumberGameScreen
 signal request_back
 
 const NumberPatternGenerator := preload("res://scripts/gameplay/number_pattern_generator.gd")
+const ShapePatternGenerator := preload("res://scripts/gameplay/shape_pattern_generator.gd")
+const LetterPatternGenerator := preload("res://scripts/gameplay/letter_pattern_generator.gd")
 const PLACEHOLDER_TEXT := "?"
 
 var _mode: String = "numbers"
 var _difficulty: String = "easy"
 var _current_puzzle: Dictionary = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var _generator: NumberPatternGenerator = NumberPatternGenerator.new()
+var _number_generator: NumberPatternGenerator = NumberPatternGenerator.new()
+var _shape_generator: ShapePatternGenerator
+var _letter_generator: LetterPatternGenerator
+var _generator
 var _allow_input: bool = true
 var _font_scale: float = 2.0
 var _font_targets: Array[CanvasItem] = []
 var _base_font_sizes: Dictionary = {}
 
 var _template_rules := {
-        "L1-1": "等差递增：每次加同一个数",
-        "L1-2": "等差递减：每次减同一个数",
-        "L1-3": "整十跳数：公差固定为 10",
-        "L1-4": "等比 ×2：每项都是上一项的 2 倍",
-        "L1-5": "等比 ÷2：每次减半，保持整数",
-        "L1-6": "差值递增：+1,+2,+3… 台阶式增长",
-        "L1-7": "周期加法：按 +a,+a,+b 循环",
-        "L1-8": "奇偶分轨：奇数位等差，偶数位常数",
-        "L2-1": "变差数列：差值本身成等差 (+3,+5,+7…)",
-        "L2-2": "奇偶双等差：奇数位和偶数位各自等差",
-        "L2-3": "平方序列：按 n² 递增",
-        "L2-4": "平方变形：n² 加或减固定常数",
-        "L2-5": "斐波那契：后一项等于前两项之和",
-        "L2-6": "交替乘加：乘以 q 再加/减 c 周期出现",
-        "L2-7": "平方间隔：等差插入两个平方或立方",
-        "L2-8": "偶增奇减：奇偶位相反方向变动",
-        "L3-1": "双层等差：差值也在递增",
-        "L3-2": "奇偶混合：奇数位等差，偶数位等比",
-        "L3-3": "两条等差交错，首项与公差可不同",
-        "L3-4": "斐波那契变体：前两项之和再加常数",
-        "L3-5": "二次序列：类似 n²，差值递增",
-        "L3-6": "乘加跃迁：上一项先乘再加/减",
-        "L3-7": "加法与乘法交替，留意周期",
-        "L3-8": "幂次/平方交替：底数或指数在变化",
+        "numbers": {
+                "L1-1": "等差递增：每次加同一个数",
+                "L1-2": "等差递减：每次减同一个数",
+                "L1-3": "整十跳数：公差固定为 10",
+                "L1-4": "等比 ×2：每项都是上一项的 2 倍",
+                "L1-5": "等比 ÷2：每次减半，保持整数",
+                "L1-6": "差值递增：+1,+2,+3… 台阶式增长",
+                "L1-7": "周期加法：按 +a,+a,+b 循环",
+                "L1-8": "奇偶分轨：奇数位等差，偶数位常数",
+                "L2-1": "变差数列：差值本身成等差 (+3,+5,+7…)",
+                "L2-2": "奇偶双等差：奇数位和偶数位各自等差",
+                "L2-3": "平方序列：按 n² 递增",
+                "L2-4": "平方变形：n² 加或减固定常数",
+                "L2-5": "斐波那契：后一项等于前两项之和",
+                "L2-6": "交替乘加：乘以 q 再加/减 c 周期出现",
+                "L2-7": "平方间隔：等差插入两个平方或立方",
+                "L2-8": "偶增奇减：奇偶位相反方向变动",
+                "L3-1": "双层等差：差值也在递增",
+                "L3-2": "奇偶混合：奇数位等差，偶数位等比",
+                "L3-3": "两条等差交错，首项与公差可不同",
+                "L3-4": "斐波那契变体：前两项之和再加常数",
+                "L3-5": "二次序列：类似 n²，差值递增",
+                "L3-6": "乘加跃迁：上一项先乘再加/减",
+                "L3-7": "加法与乘法交替，留意周期",
+                "L3-8": "幂次/平方交替：底数或指数在变化",
+        },
+        "shapes": {
+                "L1-1": "横向三格：右格等于左格与中格之和",
+                "L1-2": "竖向三格：下方等于上方两格之和",
+                "L1-3": "2x2 方阵：右下角是同行两格之和",
+                "L1-4": "十字结构：中心等于左右、上下和的平均",
+                "L1-5": "三角三点：底边两点之和等于顶点",
+                "L1-6": "两行两列：右下角 = (左上+右上) - 左下",
+                "L2-1": "9 宫格：每行递增公差一致",
+                "L2-2": "三角形：两底角和等于顶角",
+                "L2-3": "环形：相邻两点和相等，缺口需补足",
+                "L2-4": "对角线：主对角和与副对角和关联",
+                "L2-5": "中心辐射：中心为四角之和的一半",
+                "L2-6": "十字交叉：水平和竖直的差值相同",
+                "L3-1": "魔方阵：行列对角线求和一致",
+                "L3-2": "双圆交叉：交点等于相邻两点之和",
+                "L3-3": "对角平衡：两条对角线加减关系固定",
+                "L3-4": "三角级数：每条边按等差递增",
+                "L3-5": "套娃十字：外圈和内圈保持比例",
+                "L3-6": "阶梯累加：右下角由左上开始逐步加总",
+        },
+        "letters": {
+                "L1-1": "正向字母表：按顺序递增，缺末尾",
+                "L1-2": "逆向字母表：倒序递减，缺末尾",
+                "L1-3": "步长递增：每步加固定间隔",
+                "L1-4": "交替跳跃：步长在两值间轮换",
+                "L1-5": "A=1 映射：索引递增再转字母",
+                "L1-6": "字母索引：先看数字，再映射回去",
+                "L2-1": "三段等差：步长提升 1 形成阶梯",
+                "L2-2": "回文镜像：前半段映射到后半段",
+                "L2-3": "和差组合：两前项求和或求差再编码",
+                "L2-4": "三元组累加：三个一组做和运算",
+                "L2-5": "交叉位移：左右位移的字母序列交错",
+                "L2-6": "索引翻倍：数字位翻倍后转成字母",
+                "L3-1": "阶梯凯撒：起点提升并向后平移",
+                "L3-2": "双向偏移：奇偶位不同偏移量",
+                "L3-3": "累加偏移：前项字母索引逐项累加",
+                "L3-4": "多步凯撒：每步位移递增",
+                "L3-5": "指数偏移：索引成倍增长后取字母",
+                "L3-6": "多段映射：字母与数字索引混合递推",
+        }
 }
 
 var _template_hints := {
-        "L3-1": "差值也在变大，注意第二层的等差变化",
-        "L3-2": "奇数位走等差，偶数位做等比，分开观察",
-        "L3-3": "两条等差交错，首项和公差都可能不同",
-        "L3-4": "类似斐波那契但加了常数，前两项的和再做修正",
-        "L3-5": "像 n² 的二次数列，项与项之间差值在递增",
-        "L3-6": "上一项先乘再加减，数字会跳跃变大",
-        "L3-7": "加法与乘法交替出现，留意周期",
-        "L3-8": "可能是幂次或平方立方交替，先找出底数或指数"
+        "numbers": {
+                "L3-1": "差值也在变大，注意第二层的等差变化",
+                "L3-2": "奇数位走等差，偶数位做等比，分开观察",
+                "L3-3": "两条等差交错，首项和公差都可能不同",
+                "L3-4": "类似斐波那契但加了常数，前两项的和再做修正",
+                "L3-5": "像 n² 的二次数列，项与项之间差值在递增",
+                "L3-6": "上一项先乘再加减，数字会跳跃变大",
+                "L3-7": "加法与乘法交替出现，留意周期",
+                "L3-8": "可能是幂次或平方立方交替，先找出底数或指数"
+        },
+        "shapes": {},
+        "letters": {}
 }
 
 @onready var title_label: Label = %TitleLabel
@@ -110,9 +161,17 @@ func configure(mode: String, difficulty: String = "easy") -> void:
     _load_new_puzzle()
 
 func _update_titles() -> void:
-    title_label.text = "数字规律闯关"
     var diff_label := _difficulty_label()
-    subtitle_label.text = "%s · 根据数列规律填空" % diff_label
+    match _mode:
+            "shapes":
+                    title_label.text = "图形数字推理"
+                    subtitle_label.text = "%s · 填写缺失的图形数值" % diff_label
+            "letters":
+                    title_label.text = "字母规律实验室"
+                    subtitle_label.text = "%s · 补全字母或编码" % diff_label
+            _:
+                    title_label.text = "数字规律闯关"
+                    subtitle_label.text = "%s · 根据数列规律填空" % diff_label
 
 func _init_font_scaling() -> void:
     _font_targets = [
@@ -146,6 +205,10 @@ func _init_font_scaling() -> void:
 
 func _load_new_puzzle() -> void:
     _allow_input = true
+    _generator = _select_generator()
+    if _generator == null:
+            sequence_label.text = "暂时没有生成题目，请重试"
+            return
     _current_puzzle = _generator.generate_puzzle(_difficulty)
     if _current_puzzle.is_empty():
         sequence_label.text = "暂时没有生成题目，请重试"
@@ -153,20 +216,20 @@ func _load_new_puzzle() -> void:
         feedback_label.text = ""
         _lock_options(true)
         return
-    var display: Array = _current_puzzle.get("display", [])
+    var display = _current_puzzle.get("display", [])
     sequence_label.text = _format_display(display)
     var template_id: String = _current_puzzle.get("template_id", "")
     var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
-    var template_hint: String = _template_hints.get(template_id, "") as String
+    var template_hint: String = _template_hint_for(template_id)
     if template_hint != "":
         hint_text += " ｜提示：%s" % template_hint
     hint_label.text = hint_text
-    feedback_label.text = "请选择正确的数字"
+    feedback_label.text = "请选择正确的答案"
     _sync_rule_hint(template_id)
     rule_button.visible = false
     if rule_popup != null:
             rule_popup.hide()
-    _apply_options(int(_current_puzzle.get("answer", 0)))
+    _apply_options(_current_puzzle.get("answer", 0))
 
 func _valid_option_buttons() -> Array[Button]:
     var buttons: Array[Button] = []
@@ -186,26 +249,36 @@ func _difficulty_label() -> String:
                 _:
                         return _difficulty
 
-func _apply_options(answer: int) -> void:
-        var max_value := 120
-        var delta_range := 6
-        match _difficulty:
-                "medium":
-                        max_value = 220
-                        delta_range = 12
-                "hard":
-                        max_value = 1100
-                        delta_range = 24
-        var options: Array[int] = [answer]
+func _apply_options(answer) -> void:
         var buttons := _valid_option_buttons()
-        while options.size() < buttons.size():
-                var delta: int = _rng.randi_range(-delta_range, delta_range)
-                if delta == 0:
-                        continue
-                var candidate: int = clamp(answer + delta, 0, max_value)
-                if options.has(candidate):
-                        continue
-                options.append(candidate)
+        if buttons.is_empty():
+                return
+        var options: Array = [answer]
+        if answer is String:
+                while options.size() < buttons.size():
+                        var candidate := _random_letter_option(str(answer))
+                        if options.has(candidate):
+                                continue
+                        options.append(candidate)
+        else:
+                var numeric_answer: int = int(answer)
+                var max_value := 120
+                var delta_range := 6
+                match _difficulty:
+                        "medium":
+                                max_value = 220
+                                delta_range = 12
+                        "hard":
+                                max_value = 1100
+                                delta_range = 24
+                while options.size() < buttons.size():
+                        var delta: int = _rng.randi_range(-delta_range, delta_range)
+                        if delta == 0:
+                                continue
+                        var candidate: int = clamp(numeric_answer + delta, 0, max_value)
+                        if options.has(candidate):
+                                continue
+                        options.append(candidate)
         options.shuffle()
         for i in range(buttons.size()):
                 var button := buttons[i]
@@ -215,25 +288,37 @@ func _apply_options(answer: int) -> void:
         if next_button != null:
                 next_button.disabled = true
 
-func _format_display(values: Array) -> String:
+func _format_display(values) -> String:
+        if values is Dictionary:
+                var keys: Array = values.keys()
+                keys.sort()
+                var pairs: Array[String] = []
+                for key in keys:
+                        var val = values.get(key, PLACEHOLDER_TEXT)
+                        pairs.append("%s:%s" % [str(key), _format_value(val)])
+                return "  |  ".join(pairs)
         var sequence_texts: Array[String] = []
-        for value in values:
-                var text_value := PLACEHOLDER_TEXT
-                if value != null:
-                        text_value = str(value)
-                        if text_value.is_empty():
-                                text_value = PLACEHOLDER_TEXT
-                sequence_texts.append(text_value)
+        if values is Array:
+                for value in values:
+                        sequence_texts.append(_format_value(value))
         if sequence_texts.is_empty():
                 return "正在生成题目…"
         return "  ,  ".join(sequence_texts)
 
+func _format_value(value) -> String:
+        var text_value := PLACEHOLDER_TEXT
+        if value != null:
+                text_value = str(value)
+                if text_value.is_empty():
+                        text_value = PLACEHOLDER_TEXT
+        return text_value
+
 func _on_option_selected(button: Button) -> void:
         if not _allow_input:
                 return
-        var selected_value: int = int(button.text)
-        var answer: int = int(_current_puzzle.get("answer", 0))
-        if selected_value == answer:
+        var selected_value = button.text
+        var answer = _current_puzzle.get("answer", 0)
+        if _values_equal(selected_value, answer):
                 _handle_correct(button)
         else:
                 _handle_incorrect(button, answer)
@@ -246,7 +331,7 @@ func _handle_correct(button: Button) -> void:
         _lock_options(true)
         next_button.disabled = false
 
-func _handle_incorrect(button: Button, answer: int) -> void:
+func _handle_incorrect(button: Button, answer) -> void:
         feedback_label.text = "再想想：%s 不是正确答案" % str(button.text)
         feedback_label.modulate = Color(0.85, 0.24, 0.24)
         button.disabled = true
@@ -287,7 +372,8 @@ func _set_font_scale(value: float) -> void:
         _update_font_value_label()
 
 func _sync_rule_hint(template_id: String) -> void:
-        var rule_text: String = _template_rules.get(template_id, "暂无规则说明")
+        var rules: Dictionary = _template_rules.get(_mode, {})
+        var rule_text: String = rules.get(template_id, "暂无规则说明")
         if rule_label != null:
                 rule_label.text = rule_text
 
@@ -303,3 +389,36 @@ func _show_rule_popup() -> void:
 func _update_font_value_label() -> void:
         if font_value_label != null:
                 font_value_label.text = "%.1fx" % _font_scale
+
+func _select_generator():
+        match _mode:
+                "shapes":
+                        if _shape_generator == null:
+                                _shape_generator = ShapePatternGenerator.new()
+                        return _shape_generator
+                "letters":
+                        if _letter_generator == null:
+                                _letter_generator = LetterPatternGenerator.new()
+                        return _letter_generator
+                _:
+                        if _number_generator == null:
+                                _number_generator = NumberPatternGenerator.new()
+                        return _number_generator
+        return null
+
+func _template_hint_for(template_id: String) -> String:
+        var hints: Dictionary = _template_hints.get(_mode, {})
+        return hints.get(template_id, "")
+
+func _values_equal(selected_value, answer) -> bool:
+        if answer is int or answer is float:
+                return int(selected_value) == int(answer)
+        return str(selected_value) == str(answer)
+
+func _random_letter_option(answer: String) -> String:
+        var alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        var candidate := answer
+        while candidate == answer:
+                var idx := _rng.randi_range(0, alphabet.length() - 1)
+                candidate = alphabet.substr(idx, 1)
+        return candidate
