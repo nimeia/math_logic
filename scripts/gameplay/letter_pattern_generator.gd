@@ -51,7 +51,9 @@ func generate_puzzle(difficulty: String) -> Dictionary:
 func _build_puzzle(sequence: Array, template_id: String, missing_index: int, metadata: Dictionary = {}, answer_override = null) -> Dictionary:
     if missing_index < 0 or missing_index >= sequence.size():
         return {}
-    var display := sequence.duplicate()
+    var display: Array = []
+    for value in sequence:
+        display.append(value)
     display[missing_index] = PLACEHOLDER
     var answer_value = answer_override if answer_override != null else sequence[missing_index]
     return {
@@ -332,7 +334,10 @@ func _template_l3_3() -> Dictionary:
 
 func _template_l3_4() -> Dictionary:
     var shift: int = rng.randi_range(1, 5)
-    var start_idx: int = rng.randi_range(1, ALPHABET_COUNT - shift - 3)
+    var max_start: int = ALPHABET_COUNT - shift - 6
+    if max_start < 1:
+        return {}
+    var start_idx: int = rng.randi_range(1, max_start)
     var base_letters: Array[String] = []
     var sequence: Array[String] = []
     for i in range(4):
