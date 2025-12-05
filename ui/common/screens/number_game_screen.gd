@@ -3,6 +3,7 @@ class_name NumberGameScreen
 
 signal request_back
 
+const AppLogger := preload("res://scripts/core/logger.gd")
 const NumberPatternGenerator := preload("res://scripts/gameplay/number_pattern_generator.gd")
 const ShapePatternGenerator := preload("res://scripts/gameplay/shape_pattern_generator.gd")
 const LetterPatternGenerator := preload("res://scripts/gameplay/letter_pattern_generator.gd")
@@ -224,6 +225,7 @@ func _load_new_puzzle() -> void:
         return
     var display = _current_puzzle.get("display", [])
     var structure: String = _current_puzzle.get("metadata", {}).get("structure", "")
+    _log_puzzle(display, _current_puzzle.get("template_id", ""), _current_puzzle.get("answer", ""), structure)
     _render_display(display, structure)
     var template_id: String = _current_puzzle.get("template_id", "")
     var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
@@ -326,6 +328,8 @@ func _format_display(values) -> String:
                 for key in keys:
                         var val = values.get(key, PLACEHOLDER_TEXT)
                         pairs.append("%s:%s" % [str(key), _format_value(val)])
+                if pairs.is_empty():
+                        return "正在生成题目…"
                 return "  |  ".join(pairs)
         var sequence_texts: Array[String] = []
         if values is Array:
@@ -558,3 +562,14 @@ func _random_letter_option(answer: String) -> String:
                 var idx := _rng.randi_range(0, alphabet.length() - 1)
                 candidate = alphabet.substr(idx, 1)
         return candidate
+
+func _log_puzzle(display, template_id: String, answer, structure: String) -> void:
+        var rendered := _format_display(display)
+        var mode_label := "数字" if _mode == "numbers" else ("图形" if _mode == "shapes" else "字母")
+        var meta_bits: Array[String] = []
+        if not structure.is_empty():
+                meta_bits.append("结构:%s" % structure)
+        var meta_text := ""
+        if not meta_bits.is_empty():
+                meta_text = " (%s)" % ", ".join(meta_bits)
+        AppLogger.info("生成题目[%s/%s] %s%s -> %s | 答案:%s" % [mode_label, _difficulty, template_id, meta_text, rendered, str(answer)])
