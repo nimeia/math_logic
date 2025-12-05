@@ -45,11 +45,10 @@ text = "1 , 2 , 3 , ( ? )"
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 vertical_alignment = 1
 horizontal_alignment = 1
-clip_text = true
-max_lines_visible = 3
-custom_minimum_size = Vector2(0, 72)
+max_lines_visible = 0
+custom_minimum_size = Vector2(0, 120)
 size_flags_horizontal = 3
-size_flags_vertical = 1
+size_flags_vertical = 3
 autowrap_mode = 2
 
 [node name="ShapeGrid" type="GridContainer" parent="Layout/VBox"]
@@ -58,7 +57,7 @@ visible = false
 columns = 3
 custom_constants/h_separation = 8
 custom_constants/v_separation = 8
-custom_minimum_size = Vector2(0, 220)
+custom_minimum_size = Vector2(0, 440)
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
