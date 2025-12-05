@@ -44,6 +44,14 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 horizontal_alignment = 1
 
+[node name="SettingsRow" type="HBoxContainer" parent="Margin/VBox/Header"]
+alignment = 1
+
+[node name="AutoFontButton" type="Button" parent="Margin/VBox/Header/SettingsRow"]
+unique_name_in_owner = true
+text = "字体大小自动调整"
+size_flags_horizontal = 3
+
 [node name="DifficultyList" type="VBoxContainer" parent="Margin/VBox"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
