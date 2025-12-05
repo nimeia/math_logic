@@ -126,3 +126,56 @@ size_flags_horizontal = 1
 unique_name_in_owner = true
 text = "下一题"
 size_flags_horizontal = 1
+
+[node name="SettingsPopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+size = Vector2(520, 240)
+popup_exclusive = false
+
+[node name="SettingsMargin" type="MarginContainer" parent="SettingsPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 16.0
+margin_right = -24.0
+margin_bottom = -16.0
+
+[node name="SettingsVBox" type="VBoxContainer" parent="SettingsPopup/SettingsMargin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="SettingsTitle" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+text = "界面设置"
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="FontRow" type="HBoxContainer" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+alignment = 1
+custom_constants/separation = 10
+
+[node name="FontLabel" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+text = "字体大小"
+
+[node name="FontSlider" type="HSlider" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+
+[node name="FontValueLabel" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+unique_name_in_owner = true
+text = "2.0x"
+size_flags_horizontal = 1
+
+[node name="SettingsHint" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+text = "默认字体已放大 2 倍，可用滑杆微调。"
+modulate = Color(0.4, 0.4, 0.4, 1)
+autowrap_mode = 2
+size_flags_horizontal = 3
+
+[node name="SettingsButtons" type="HBoxContainer" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+alignment = 2
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsPopup/SettingsMargin/SettingsVBox/SettingsButtons"]
+unique_name_in_owner = true
+text = "关闭"
