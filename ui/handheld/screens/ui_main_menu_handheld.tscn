@@ -5,6 +5,7 @@
 [node name="MainMenuHandheld" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_font_sizes/default_font_size = 28
 script = ExtResource("1")
 
 [node name="Margin" type="MarginContainer" parent="."]
@@ -36,7 +37,7 @@ text = "数字规律小博士"
 
 [node name="AppSubtitle" type="Label" parent="Margin/VBox/Top/TitleRow/TitleBlock"]
 text = "练数字 · 玩图形 · 玩转字母规律"
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 28
 
 [node name="SettingsButton" type="Button" parent="Margin/VBox/Top/TitleRow"]
 unique_name_in_owner = true
