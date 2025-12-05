@@ -41,25 +41,25 @@ var _template_hints := {
 ]
 
 func _ready() -> void:
-	super._ready()
-	_rng.randomize()
-	_wire_button(settings_button, Callable(self, "_on_settings_pressed"))
-	_wire_button(back_button, Callable(self, "_on_back_pressed"))
-	_wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
-	_wire_button(next_button, Callable(self, "_on_next_pressed"))
-	for button in option_buttons:
-		_wire_button(button, Callable(self, "_on_option_selected"), button)
-	_update_titles()
-	if _current_puzzle.is_empty():
-		_load_new_puzzle()
+    super._ready()
+    _rng.randomize()
+    _wire_button(settings_button, Callable(self, "_on_settings_pressed"))
+    _wire_button(back_button, Callable(self, "_on_back_pressed"))
+    _wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
+    _wire_button(next_button, Callable(self, "_on_next_pressed"))
+    for button in option_buttons:
+        _wire_button(button, Callable(self, "_on_option_selected"), button)
+    _update_titles()
+    if _current_puzzle.is_empty():
+        _load_new_puzzle()
 func _wire_button(button: Button, callable: Callable, argument = null) -> void:
-	if button == null:
-		push_warning("Button not found for %s" % callable.get_method())
-		return
-	if argument == null:
-		button.pressed.connect(callable)
-	else:
-		button.pressed.connect(func() -> void: callable.call(argument))
+    if button == null:
+        push_warning("Button not found for %s" % callable.get_method())
+        return
+    if argument == null:
+        button.pressed.connect(callable)
+    else:
+        button.pressed.connect(func() -> void: callable.call(argument))
 func configure(mode: String, difficulty: String = "easy") -> void:
         _mode = mode
         _difficulty = difficulty
@@ -72,27 +72,34 @@ func _update_titles() -> void:
         subtitle_label.text = "%s · 根据数列规律填空" % diff_label
 
 func _load_new_puzzle() -> void:
-	_allow_input = true
-	_current_puzzle = _generator.generate_puzzle(_difficulty)
-	if _current_puzzle.is_empty():
-		sequence_label.text = "暂时没有生成题目，请重试"
-		hint_label.text = ""
-		feedback_label.text = ""
-		_lock_options(true)
-		return
-	var display: Array = _current_puzzle.get("display", [])
-	var sequence_texts: Array[String] = []
-	for value in display:
-		sequence_texts.append(str(value))
-	sequence_label.text = "  ,  ".join(sequence_texts)
-	var template_id: String = _current_puzzle.get("template_id", "")
-	var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
-	var template_hint: String = _template_hints.get(template_id, "") as String
-	if template_hint != "":
-		hint_text += " ｜提示：%s" % template_hint
-	hint_label.text = hint_text
-	feedback_label.text = "请选择正确的数字"
-	_apply_options(int(_current_puzzle.get("answer", 0)))
+    _allow_input = true
+    _current_puzzle = _generator.generate_puzzle(_difficulty)
+    if _current_puzzle.is_empty():
+        sequence_label.text = "暂时没有生成题目，请重试"
+        hint_label.text = ""
+        feedback_label.text = ""
+        _lock_options(true)
+        return
+    var display: Array = _current_puzzle.get("display", [])
+    var sequence_texts: Array[String] = []
+    for value in display:
+        sequence_texts.append(str(value))
+    sequence_label.text = "  ,  ".join(sequence_texts)
+    var template_id: String = _current_puzzle.get("template_id", "")
+    var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
+    var template_hint: String = _template_hints.get(template_id, "") as String
+    if template_hint != "":
+        hint_text += " ｜提示：%s" % template_hint
+    hint_label.text = hint_text
+    feedback_label.text = "请选择正确的数字"
+    _apply_options(int(_current_puzzle.get("answer", 0)))
+
+func _valid_option_buttons() -> Array[Button]:
+    var buttons: Array[Button] = []
+    for btn in option_buttons:
+        if btn != null:
+            buttons.append(btn)
+    return buttons
 
 func _difficulty_label() -> String:
         match _difficulty:
