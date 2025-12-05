@@ -23,6 +23,7 @@ alignment = 1
 custom_constants/separation = 10
 
 [node name="TitleLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "数字规律闯关"
 vertical_alignment = 1
 horizontal_alignment = 1
@@ -30,6 +31,7 @@ theme_type_variation = "HeaderMedium"
 size_flags_horizontal = 3
 
 [node name="SubtitleLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "简单 · 根据数列规律填空"
 modulate = Color(0.4, 0.4, 0.4, 1)
 vertical_alignment = 1
@@ -38,6 +40,7 @@ size_flags_horizontal = 3
 autowrap_mode = 2
 
 [node name="SequenceLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "1 , 2 , 3 , ( ? )"
 vertical_alignment = 1
 horizontal_alignment = 1
@@ -47,6 +50,7 @@ size_flags_horizontal = 3
 autowrap_mode = 2
 
 [node name="HintLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "题型 L1-1 · 填写 ?"
 modulate = Color(0.35, 0.35, 0.35, 1)
 horizontal_alignment = 1
@@ -64,30 +68,35 @@ custom_constants/v_separation = 10
 size_flags_horizontal = 3
 
 [node name="Option1" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "12"
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_minimum_size = Vector2(0, 48)
 
 [node name="Option2" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "13"
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_minimum_size = Vector2(0, 48)
 
 [node name="Option3" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "14"
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_minimum_size = Vector2(0, 48)
 
 [node name="Option4" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "15"
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_minimum_size = Vector2(0, 48)
 
 [node name="FeedbackLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "请选择正确的数字"
 vertical_alignment = 1
 horizontal_alignment = 1
@@ -99,17 +108,21 @@ alignment = 1
 custom_constants/separation = 10
 
 [node name="BackButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "返回菜单"
 size_flags_horizontal = 1
 
 [node name="SettingsButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "设置"
 size_flags_horizontal = 1
 
 [node name="RefreshButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "换一题"
 size_flags_horizontal = 1
 
 [node name="NextButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "下一题"
 size_flags_horizontal = 1
