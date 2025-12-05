@@ -121,10 +121,7 @@ func _load_new_puzzle() -> void:
         _lock_options(true)
         return
     var display: Array = _current_puzzle.get("display", [])
-    var sequence_texts: Array[String] = []
-    for value in display:
-        sequence_texts.append(str(value))
-    sequence_label.text = "  ,  ".join(sequence_texts)
+    sequence_label.text = _format_display(display)
     var template_id: String = _current_puzzle.get("template_id", "")
     var hint_text := "题型 %s · 填写 %s" % [template_id, PLACEHOLDER_TEXT]
     var template_hint: String = _template_hints.get(template_id, "") as String
@@ -180,6 +177,19 @@ func _apply_options(answer: int) -> void:
                 button.modulate = Color(1, 1, 1)
         if next_button != null:
                 next_button.disabled = true
+
+func _format_display(values: Array) -> String:
+        var sequence_texts: Array[String] = []
+        for value in values:
+                var text_value := PLACEHOLDER_TEXT
+                if value != null:
+                        text_value = str(value)
+                        if text_value.is_empty():
+                                text_value = PLACEHOLDER_TEXT
+                sequence_texts.append(text_value)
+        if sequence_texts.is_empty():
+                return "正在生成题目…"
+        return "  ,  ".join(sequence_texts)
 
 func _on_option_selected(button: Button) -> void:
         if not _allow_input:
