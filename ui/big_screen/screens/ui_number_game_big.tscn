@@ -60,6 +60,15 @@ horizontal_alignment = 1
 size_flags_horizontal = 3
 autowrap_mode = 2
 
+[node name="RuleRow" type="CenterContainer" parent="Layout/VBox"]
+size_flags_horizontal = 3
+
+[node name="RuleButton" type="Button" parent="Layout/VBox/RuleRow"]
+unique_name_in_owner = true
+visible = false
+text = "查看规则"
+custom_minimum_size = Vector2(0, 52)
+
 [node name="OptionsWrapper" type="CenterContainer" parent="Layout/VBox"]
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -134,6 +143,36 @@ size_flags_horizontal = 1
 unique_name_in_owner = true
 size = Vector2(520, 240)
 popup_exclusive = false
+
+[node name="RulePopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+size = Vector2(520, 200)
+
+[node name="RuleMargin" type="MarginContainer" parent="RulePopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 16.0
+margin_right = -24.0
+margin_bottom = -16.0
+
+[node name="RuleVBox" type="VBoxContainer" parent="RulePopup/RuleMargin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_constants/separation = 12
+
+[node name="RuleTitle" type="Label" parent="RulePopup/RuleMargin/RuleVBox"]
+text = "题目规则"
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="RuleLabel" type="Label" parent="RulePopup/RuleMargin/RuleVBox"]
+unique_name_in_owner = true
+text = "规则描述"
+autowrap_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="SettingsMargin" type="MarginContainer" parent="SettingsPopup"]
 anchor_right = 1.0

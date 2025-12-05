@@ -16,6 +16,33 @@ var _font_scale: float = 2.0
 var _font_targets: Array[CanvasItem] = []
 var _base_font_sizes: Dictionary = {}
 
+var _template_rules := {
+        "L1-1": "等差递增：每次加同一个数",
+        "L1-2": "等差递减：每次减同一个数",
+        "L1-3": "整十跳数：公差固定为 10",
+        "L1-4": "等比 ×2：每项都是上一项的 2 倍",
+        "L1-5": "等比 ÷2：每次减半，保持整数",
+        "L1-6": "差值递增：+1,+2,+3… 台阶式增长",
+        "L1-7": "周期加法：按 +a,+a,+b 循环",
+        "L1-8": "奇偶分轨：奇数位等差，偶数位常数",
+        "L2-1": "变差数列：差值本身成等差 (+3,+5,+7…)",
+        "L2-2": "奇偶双等差：奇数位和偶数位各自等差",
+        "L2-3": "平方序列：按 n² 递增",
+        "L2-4": "平方变形：n² 加或减固定常数",
+        "L2-5": "斐波那契：后一项等于前两项之和",
+        "L2-6": "交替乘加：乘以 q 再加/减 c 周期出现",
+        "L2-7": "平方间隔：等差插入两个平方或立方",
+        "L2-8": "偶增奇减：奇偶位相反方向变动",
+        "L3-1": "双层等差：差值也在递增",
+        "L3-2": "奇偶混合：奇数位等差，偶数位等比",
+        "L3-3": "两条等差交错，首项与公差可不同",
+        "L3-4": "斐波那契变体：前两项之和再加常数",
+        "L3-5": "二次序列：类似 n²，差值递增",
+        "L3-6": "乘加跃迁：上一项先乘再加/减",
+        "L3-7": "加法与乘法交替，留意周期",
+        "L3-8": "幂次/平方交替：底数或指数在变化",
+}
+
 var _template_hints := {
         "L3-1": "差值也在变大，注意第二层的等差变化",
         "L3-2": "奇数位走等差，偶数位做等比，分开观察",
@@ -32,6 +59,9 @@ var _template_hints := {
 @onready var sequence_label: Label = %SequenceLabel
 @onready var hint_label: Label = %HintLabel
 @onready var feedback_label: Label = %FeedbackLabel
+@onready var rule_button: Button = %RuleButton
+@onready var rule_popup: PopupPanel = %RulePopup
+@onready var rule_label: Label = %RuleLabel
 @onready var settings_button: Button = %SettingsButton
 @onready var settings_popup: PopupPanel = %SettingsPopup
 @onready var close_settings_button: Button = %CloseSettingsButton
@@ -55,6 +85,7 @@ func _ready() -> void:
     _wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
     _wire_button(next_button, Callable(self, "_on_next_pressed"))
     _wire_button(close_settings_button, Callable(settings_popup, "hide"))
+    _wire_button(rule_button, Callable(self, "_on_rule_pressed"))
     for button in option_buttons:
         _wire_button(button, Callable(self, "_on_option_selected"), button)
     _init_font_scaling()
@@ -90,6 +121,8 @@ func _init_font_scaling() -> void:
             sequence_label,
             hint_label,
             feedback_label,
+            rule_button,
+            rule_label,
             settings_button,
             close_settings_button,
             back_button,
@@ -129,6 +162,10 @@ func _load_new_puzzle() -> void:
         hint_text += " ｜提示：%s" % template_hint
     hint_label.text = hint_text
     feedback_label.text = "请选择正确的数字"
+    _sync_rule_hint(template_id)
+    rule_button.visible = false
+    if rule_popup != null:
+            rule_popup.hide()
     _apply_options(int(_current_puzzle.get("answer", 0)))
 
 func _valid_option_buttons() -> Array[Button]:
@@ -214,6 +251,7 @@ func _handle_incorrect(button: Button, answer: int) -> void:
         feedback_label.modulate = Color(0.85, 0.24, 0.24)
         button.disabled = true
         button.modulate = Color(0.7, 0.7, 0.7)
+        _show_rule_button()
 
 func _lock_options(state: bool) -> void:
         for btn in _valid_option_buttons():
@@ -232,6 +270,9 @@ func _on_settings_pressed() -> void:
         if settings_popup != null:
                 settings_popup.popup_centered()
 
+func _on_rule_pressed() -> void:
+        _show_rule_popup()
+
 func _on_font_slider_changed(value: float) -> void:
         _set_font_scale(value)
 
@@ -244,6 +285,20 @@ func _set_font_scale(value: float) -> void:
                 var scaled: int = int(round(base_size * _font_scale))
                 node.add_theme_font_size_override("font_size", scaled)
         _update_font_value_label()
+
+func _sync_rule_hint(template_id: String) -> void:
+        var rule_text: String = _template_rules.get(template_id, "暂无规则说明")
+        if rule_label != null:
+                rule_label.text = rule_text
+
+func _show_rule_button() -> void:
+        if rule_button != null:
+                rule_button.visible = true
+        _show_rule_popup()
+
+func _show_rule_popup() -> void:
+        if rule_popup != null:
+                rule_popup.popup_centered()
 
 func _update_font_value_label() -> void:
         if font_value_label != null:
