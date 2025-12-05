@@ -7,56 +7,298 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
 
-[node name="TitleLabel" type="Label" parent="."]
-text = "数字规律闯关"
-theme_type_variation = "HeaderMedium"
+[node name="Layout" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = 24.0
+margin_right = -32.0
+margin_bottom = -40.0
 
-[node name="SubtitleLabel" type="Label" parent="."]
+[node name="VBox" type="VBoxContainer" parent="Layout"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+alignment = 1
+custom_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
+text = "数字规律闯关"
+vertical_alignment = 1
+horizontal_alignment = 1
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="SubtitleLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "简单 · 根据数列规律填空"
 modulate = Color(0.4, 0.4, 0.4, 1)
+vertical_alignment = 1
+horizontal_alignment = 1
+size_flags_horizontal = 3
 autowrap_mode = 2
 
-[node name="SequenceLabel" type="Label" parent="."]
+[node name="SequenceLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "1 , 2 , 3 , ( ? )"
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 vertical_alignment = 1
 horizontal_alignment = 1
 clip_text = true
 max_lines_visible = 3
+custom_minimum_size = Vector2(0, 72)
+size_flags_horizontal = 3
+size_flags_vertical = 1
 autowrap_mode = 2
 
-[node name="HintLabel" type="Label" parent="."]
+[node name="ShapeGrid" type="GridContainer" parent="Layout/VBox"]
+unique_name_in_owner = true
+visible = false
+columns = 3
+custom_constants/h_separation = 8
+custom_constants/v_separation = 8
+custom_minimum_size = Vector2(0, 220)
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Cell1" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell2" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell3" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell4" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell5" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell6" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell7" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell8" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="Cell9" type="Label" parent="Layout/VBox/ShapeGrid"]
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(68, 64)
+
+[node name="HintLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "题型 L1-1 · 填写 ?"
 modulate = Color(0.35, 0.35, 0.35, 1)
 horizontal_alignment = 1
+size_flags_horizontal = 3
 autowrap_mode = 2
 
-[node name="Options" type="GridContainer" parent="."]
+[node name="RuleRow" type="CenterContainer" parent="Layout/VBox"]
+size_flags_horizontal = 3
+
+[node name="RuleButton" type="Button" parent="Layout/VBox/RuleRow"]
+unique_name_in_owner = true
+visible = false
+text = "查看规则"
+custom_minimum_size = Vector2(0, 52)
+
+[node name="OptionsWrapper" type="CenterContainer" parent="Layout/VBox"]
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Options" type="GridContainer" parent="Layout/VBox/OptionsWrapper"]
 columns = 2
+custom_constants/h_separation = 12
+custom_constants/v_separation = 10
+size_flags_horizontal = 3
 
-[node name="Option1" type="Button" parent="Options"]
+[node name="Option1" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "12"
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(0, 48)
 
-[node name="Option2" type="Button" parent="Options"]
+[node name="Option2" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "13"
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(0, 48)
 
-[node name="Option3" type="Button" parent="Options"]
+[node name="Option3" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "14"
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(0, 48)
 
-[node name="Option4" type="Button" parent="Options"]
+[node name="Option4" type="Button" parent="Layout/VBox/OptionsWrapper/Options"]
+unique_name_in_owner = true
 text = "15"
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_minimum_size = Vector2(0, 48)
 
-[node name="FeedbackLabel" type="Label" parent="."]
+[node name="FeedbackLabel" type="Label" parent="Layout/VBox"]
+unique_name_in_owner = true
 text = "请选择正确的数字"
+vertical_alignment = 1
 horizontal_alignment = 1
+size_flags_horizontal = 3
 
-[node name="SettingsButton" type="Button" parent="."]
-text = "设置"
+[node name="Buttons" type="HBoxContainer" parent="Layout/VBox"]
+size_flags_horizontal = 3
+alignment = 1
+custom_constants/separation = 10
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "返回菜单"
+size_flags_horizontal = 1
 
-[node name="RefreshButton" type="Button" parent="."]
+[node name="SettingsButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
+text = "设置"
+size_flags_horizontal = 1
+
+[node name="RefreshButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "换一题"
+size_flags_horizontal = 1
 
-[node name="NextButton" type="Button" parent="."]
+[node name="NextButton" type="Button" parent="Layout/VBox/Buttons"]
+unique_name_in_owner = true
 text = "下一题"
+size_flags_horizontal = 1
+
+[node name="SettingsPopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+size = Vector2(480, 220)
+
+[node name="RulePopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+size = Vector2(480, 200)
+
+[node name="RuleMargin" type="MarginContainer" parent="RulePopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 18.0
+margin_top = 12.0
+margin_right = -18.0
+margin_bottom = -12.0
+
+[node name="RuleVBox" type="VBoxContainer" parent="RulePopup/RuleMargin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="RuleTitle" type="Label" parent="RulePopup/RuleMargin/RuleVBox"]
+text = "题目规则"
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="RuleLabel" type="Label" parent="RulePopup/RuleMargin/RuleVBox"]
+unique_name_in_owner = true
+text = "规则描述"
+autowrap_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SettingsMargin" type="MarginContainer" parent="SettingsPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 12.0
+margin_right = -16.0
+margin_bottom = -12.0
+
+[node name="SettingsVBox" type="VBoxContainer" parent="SettingsPopup/SettingsMargin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_constants/separation = 8
+
+[node name="SettingsTitle" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+text = "界面设置"
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="FontRow" type="HBoxContainer" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+alignment = 1
+custom_constants/separation = 8
+
+[node name="FontLabel" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+text = "字体大小"
+
+[node name="FontSlider" type="HSlider" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+
+[node name="FontValueLabel" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox/FontRow"]
+unique_name_in_owner = true
+text = "2.0x"
+size_flags_horizontal = 1
+
+[node name="SettingsHint" type="Label" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+text = "默认字体已放大 2 倍，可用滑杆微调。"
+modulate = Color(0.4, 0.4, 0.4, 1)
+autowrap_mode = 2
+size_flags_horizontal = 3
+
+[node name="SettingsButtons" type="HBoxContainer" parent="SettingsPopup/SettingsMargin/SettingsVBox"]
+alignment = 2
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsPopup/SettingsMargin/SettingsVBox/SettingsButtons"]
+unique_name_in_owner = true
+text = "关闭"
