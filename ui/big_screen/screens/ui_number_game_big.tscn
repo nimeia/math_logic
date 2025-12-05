@@ -150,6 +150,15 @@ visible = false
 text = "查看规则"
 custom_minimum_size = Vector2(0, 52)
 
+[node name="SolutionRow" type="CenterContainer" parent="Layout/VBox"]
+size_flags_horizontal = 3
+
+[node name="SolutionButton" type="Button" parent="Layout/VBox/SolutionRow"]
+unique_name_in_owner = true
+visible = false
+text = "显示计算过程"
+custom_minimum_size = Vector2(0, 52)
+
 [node name="OptionsWrapper" type="CenterContainer" parent="Layout/VBox"]
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -251,6 +260,36 @@ size_flags_horizontal = 3
 [node name="RuleLabel" type="Label" parent="RulePopup/RuleMargin/RuleVBox"]
 unique_name_in_owner = true
 text = "规则描述"
+autowrap_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SolutionPopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+size = Vector2(520, 220)
+
+[node name="SolutionMargin" type="MarginContainer" parent="SolutionPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = 16.0
+margin_right = -24.0
+margin_bottom = -16.0
+
+[node name="SolutionVBox" type="VBoxContainer" parent="SolutionPopup/SolutionMargin"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_constants/separation = 12
+
+[node name="SolutionTitle" type="Label" parent="SolutionPopup/SolutionMargin/SolutionVBox"]
+text = "计算过程"
+theme_type_variation = "HeaderMedium"
+size_flags_horizontal = 3
+
+[node name="SolutionLabel" type="Label" parent="SolutionPopup/SolutionMargin/SolutionVBox"]
+unique_name_in_owner = true
+text = "完整序列与规则"
 autowrap_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
