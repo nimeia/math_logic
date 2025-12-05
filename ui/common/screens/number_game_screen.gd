@@ -43,16 +43,23 @@ var _template_hints := {
 func _ready() -> void:
 	super._ready()
 	_rng.randomize()
-	settings_button.pressed.connect(_on_settings_pressed)
-	back_button.pressed.connect(_on_back_pressed)
-	refresh_button.pressed.connect(_on_refresh_pressed)
-	next_button.pressed.connect(_on_next_pressed)
+	_wire_button(settings_button, Callable(self, "_on_settings_pressed"))
+	_wire_button(back_button, Callable(self, "_on_back_pressed"))
+	_wire_button(refresh_button, Callable(self, "_on_refresh_pressed"))
+	_wire_button(next_button, Callable(self, "_on_next_pressed"))
 	for button in option_buttons:
-		button.pressed.connect(func() -> void: _on_option_selected(button))
+		_wire_button(button, Callable(self, "_on_option_selected"), button)
 	_update_titles()
 	if _current_puzzle.is_empty():
 		_load_new_puzzle()
-
+func _wire_button(button: Button, callable: Callable, argument = null) -> void:
+	if button == null:
+		push_warning("Button not found for %s" % callable.get_method())
+		return
+	if argument == null:
+		button.pressed.connect(callable)
+	else:
+		button.pressed.connect(func() -> void: callable.call(argument))
 func configure(mode: String, difficulty: String = "easy") -> void:
 	_mode = mode
 	_difficulty = difficulty
