@@ -61,15 +61,18 @@ func _wire_button(button: Button, callable: Callable, argument = null) -> void:
     else:
         button.pressed.connect(func() -> void: callable.call(argument))
 func configure(mode: String, difficulty: String = "easy") -> void:
-        _mode = mode
-        _difficulty = difficulty
-        _update_titles()
-        _load_new_puzzle()
+    _mode = mode
+    _difficulty = difficulty
+    # When invoked before the scene is ready, delay UI updates until _ready runs.
+    if not is_node_ready():
+        return
+    _update_titles()
+    _load_new_puzzle()
 
 func _update_titles() -> void:
-        title_label.text = "数字规律闯关"
-        var diff_label := _difficulty_label()
-        subtitle_label.text = "%s · 根据数列规律填空" % diff_label
+    title_label.text = "数字规律闯关"
+    var diff_label := _difficulty_label()
+    subtitle_label.text = "%s · 根据数列规律填空" % diff_label
 
 func _load_new_puzzle() -> void:
     _allow_input = true
